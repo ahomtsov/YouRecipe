@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">YouRecipe</string>
+    <string name="title_home">Рецепты</string>
+    <string name="title_dashboard">Фильтр</string>
+    <string name="title_notifications">Профиль</string>
+    <string name="first_course">Первые блюда</string>
+    <string name="second_course">Вторые блюда</string>
+    <string name="salad">Салаты</string>
+    <string name="dessert">Десерты</string>
+    <string name="recipeCategory">Выберите категорию рецепта</string>
+    <string name="chooseProduct">Выбрать продукты</string>
+    <string name="acceptChoiceOfProduct">Подтвердить выбор</string>
+    <string name="clearChoiceOfProduct">Очистить выбор</string>
+    <string name="calorificValue">Укажите диапазон калорийности</string>
+    <string name="pfcValue">Укажите диапазон БЖУ</string>
+    <string name="ingredientsList">Список ингредиентов:</string>
+    <string name="steps">Шаги приготовления:</string>
+    <string name="calories">Калорийность:</string>
+</resources>

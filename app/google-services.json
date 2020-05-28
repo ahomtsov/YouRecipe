@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "862181708452",
+    "firebase_url": "https://yourecipe-c7da0.firebaseio.com",
+    "project_id": "yourecipe-c7da0",
+    "storage_bucket": "yourecipe-c7da0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862181708452:android:fb678f353e8e1fd3ea8c31",
+        "android_client_info": {
+          "package_name": "com.example.yourecipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862181708452-pjl2ss87mk14ec9c6v6kqk7lom8ot2ie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8yLQpcqaRhm1LRsh6sI6_UsaawPcG1C8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862181708452-pjl2ss87mk14ec9c6v6kqk7lom8ot2ie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
