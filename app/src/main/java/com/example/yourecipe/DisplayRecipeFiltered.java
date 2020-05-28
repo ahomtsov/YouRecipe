@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 
 import com.example.yourecipe.adapter.RecipeViewAdapter;
@@ -35,34 +36,77 @@ public class DisplayRecipeFiltered extends AppCompatActivity {
     private RecipeViewAdapter recipeViewAdapter;
     String path;
     String title;
+    int caloriesFrom;
+    int caloriesTo;
+    int radioButtonSelect;
+
+    private HashMap<String, String> recipeValuesMap;
+    private List<String> recipeValuesMapValues;
+    String categoryString;
+    String recipeString;
+    String recipeName;
+    String recipeCaloriesS;
+    String recipeSteps;
+    String recipeIngredients;
+    Integer recipeCalories;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_recipe_category);
+        setContentView(R.layout.activity_display_recipe_filtered);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        String caloriesFrom = getIntent().getStringExtra("caloriesFrom");
-        String caloriesTo = getIntent().getStringExtra("caloriesTo");
-        int radioButtonSelect = getIntent().getIntExtra("radioButtonSelect", 0);
+        String caloriesFromS = getIntent().getStringExtra("caloriesFrom");
+        String caloriesToS = getIntent().getStringExtra("caloriesTo");
+        radioButtonSelect = getIntent().getIntExtra("radioButtonSelect", 0);
+
+        try {
+            caloriesFrom = Integer.parseInt(caloriesFromS);
+        }
+        catch (NumberFormatException ex) {
+            caloriesFrom = 0;
+        }
+
+        try {
+            caloriesTo = Integer.parseInt(caloriesToS);
+        }
+        catch (NumberFormatException ex) {
+            caloriesTo = 10000;
+        }
+
+
+        System.out.println("caloriesFrom = " + caloriesFrom);
+        System.out.println("caloriesTo = " + caloriesTo);
+
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
         if (radioButtonSelect == 1) {
             path = "recipeFirstCourse";
-            //title = "Первые блюда";
+            categoryString = ("category:" + radioButtonSelect);
         }
         if (radioButtonSelect == 2) {
             path = "recipeSecondCourse";
+            categoryString = ("category:" + radioButtonSelect);
+            dbRef.child("selected").child(androidId).child("category").setValue(2);
             //title = "Вторые блюда";
         }
         if (radioButtonSelect == 3) {
             path = "recipeSalad";
+            categoryString = ("category:" + radioButtonSelect);
+            dbRef.child("selected").child(androidId).child("category").setValue(3);
             //title = "Салаты";
         }
         if (radioButtonSelect == 4) {
             path = "recipeDessert";
+            categoryString = ("category:" + radioButtonSelect);
+            dbRef.child("selected").child(androidId).child("category").setValue(4);
             //title = "Десерты";
         }
+
+
+
 
         System.out.println("RadioButton = " + radioButtonSelect);
 
@@ -79,6 +123,31 @@ public class DisplayRecipeFiltered extends AppCompatActivity {
                 //products.remove(0);
                 System.out.println("Recipes: " + recipes);
                 System.out.println("Номер рецепта: " + recipesNumbers);
+                int numberOfRecipes = recipes.size();
+                System.out.println("Кол-во рецептов: " + numberOfRecipes);
+                int counterForRecipe = 0;
+                int counterForArrayList = 0;
+                while (numberOfRecipes > 0) {
+                    recipeString = ("recipe:" + (counterForRecipe + 1));
+                    GenericTypeIndicator<HashMap<String, String>> t1 = new GenericTypeIndicator<HashMap<String, String>>() {};
+                    recipeValuesMap = dataSnapshot.child(categoryString).child(recipeString).getValue(t1);
+
+                    System.out.println("Counter: " + counterForRecipe);
+                    recipeValuesMapValues = new ArrayList<String>(recipeValuesMap.values());
+
+                    recipeCaloriesS = recipeValuesMapValues.get(1);
+                    recipeCalories = Integer.parseInt(recipeCaloriesS);
+                    if (recipeCalories < caloriesFrom || recipeCalories > caloriesTo) {
+                        recipes.remove(counterForArrayList);
+                        recipesNumbers.remove(counterForArrayList);
+                        counterForArrayList--;
+                    }
+
+                    counterForRecipe++;
+                    counterForArrayList++;
+                    numberOfRecipes--;
+                }
+                System.out.println("Фильтр   " + recipes);
                 loadRecipes(recipes, recipesNumbers);
             }
 
@@ -88,7 +157,7 @@ public class DisplayRecipeFiltered extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recyclerViewProductCategory);
+        recyclerView = findViewById(R.id.recyclerViewProductCategoryFiltered);
 
         recyclerView.setHasFixedSize(true);
 
@@ -100,7 +169,7 @@ public class DisplayRecipeFiltered extends AppCompatActivity {
 
     public void createRecipe(View view) {
 
-        //saveSelectedCategory(view.getId());
+        saveSelectedCategory(view.getId());
 
         Intent intent = new Intent(this, DisplayRecipe.class);
 
@@ -115,8 +184,16 @@ public class DisplayRecipeFiltered extends AppCompatActivity {
 
         //listView.setAdapter(adapter);
 
-
+        recipeViewAdapter.clearItems();
         recipeViewAdapter.setItems(recipes, imgPath);
+    }
+
+    private void saveSelectedCategory(int recipe) {
+        //int category = getIntent().getIntExtra("keyOfButton", 0);
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        Integer a = recipesNumbers.get(recipe);
+        dbRef.child("selected").child(androidId).child("recipe").setValue(a);
     }
 
 }

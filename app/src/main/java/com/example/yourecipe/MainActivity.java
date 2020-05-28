@@ -108,17 +108,22 @@ public class MainActivity extends AppCompatActivity {
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroupRecipeCategory);
 
         int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = (RadioButton) findViewById(checkedRadioButtonId);
 
-        if (checkedRadioButtonId == 2131230956)
+        String rbText = radioButton.getText().toString();
+
+        System.out.println("RadioGroup: " + radioGroup);
+
+        if (rbText.equals("Первые блюда"))
             radioButtonSelect = 1;
 
-        if (checkedRadioButtonId == 2131230958)
+        if (rbText.equals("Вторые блюда"))
             radioButtonSelect = 2;
 
-        if (checkedRadioButtonId == 2131230957)
+        if (rbText.equals("Салаты"))
             radioButtonSelect = 3;
 
-        if (checkedRadioButtonId == 2131230955)
+        if (rbText.equals("Десерты"))
             radioButtonSelect = 4;
 
         System.out.println(checkedRadioButtonId);

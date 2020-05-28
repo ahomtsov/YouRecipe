@@ -119,7 +119,8 @@ public class DisplayRecipeCategory extends AppCompatActivity {
 
         //listView.setAdapter(adapter);
 
-
+        System.out.println("Категория: " + recipes);
+        recipeViewAdapter.clearItems();
         recipeViewAdapter.setItems(recipes, imgPath);
     }
 

@@ -33,17 +33,21 @@ public class RecipeViewAdapter extends RecyclerView.Adapter<RecipeViewAdapter.Re
     public void setItems(Collection recipes, Collection images) {
         recipeList.addAll(recipes);
         imgList.addAll(images);
+        System.out.println("setItems: " + recipeList);
         notifyDataSetChanged();
     }
 
     public void clearItems() {
         recipeList.clear();
         imgList.clear();
+        System.out.println("clearItems: " + recipeList);
         notifyDataSetChanged();
     }
 
     @Override
     public RecycleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("onCreateViewHolder: " + recipeList);
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_item_view, parent, false);
         return new RecycleViewHolder(view);
@@ -51,14 +55,21 @@ public class RecipeViewAdapter extends RecyclerView.Adapter<RecipeViewAdapter.Re
 
     @Override
     public int getItemCount() {
+        System.out.println("getItemCount: " + recipeList.size());
         return recipeList.size();
     }
 
     @Override
     public void onBindViewHolder(RecycleViewHolder holder, int position) {
         try {
-            holder.bind(position, recipeList.get(position), imgList.get(position));
-        } catch (Exception ex) {}
+            System.out.println("onBindViewHolder recipeList: " + recipeList);
+            System.out.println("onBindViewHolder imgList: " + imgList);
+            //holder.bind(position, recipeList.get(position), imgList.get(position));
+            holder.bind(position, recipeList.get(position), null);
+        } catch (Exception ex) {
+            System.out.println("ERROR IN onBindViewHolder: ");
+            ex.printStackTrace();
+        }
     }
 
     class RecycleViewHolder extends RecyclerView.ViewHolder {
@@ -68,11 +79,13 @@ public class RecipeViewAdapter extends RecyclerView.Adapter<RecipeViewAdapter.Re
 
         public RecycleViewHolder(View itemView) {
             super(itemView);
+            System.out.println("constructor: " + recipeList);
             recipeImageButtonView = itemView.findViewById(R.id.imageButtonRecipeView);
             recipeTextView = itemView.findViewById(R.id.textViewRecipeView);
         }
 
         public void bind(final int position, String product, String image) throws IOException {
+            System.out.println("bind: " + recipeList);
             storageRef = FirebaseStorage.getInstance().getReference();
 
             StorageReference imageRef = storageRef.child("recipeFirstCourse/1.jpg");
